@@ -1,0 +1,10 @@
+<svg width="800" height="900" viewBox="0 0 800 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="900" rx="48" fill="#F4EFE7"/>
+  <path d="M240 620C240 486 348 378 482 378H514C648 378 756 486 756 620V700H240V620Z" fill="#1A1A1A"/>
+  <path d="M360 300C360 214 430 144 516 144C602 144 672 214 672 300V368H360V300Z" fill="#232323"/>
+  <path d="M394 310C394 240 446 188 516 188C586 188 638 240 638 310V348H394V310Z" fill="#C7AF7A"/>
+  <path d="M406 404H626V520C626 560 594 592 554 592H478C438 592 406 560 406 520V404Z" fill="#D9C7A0"/>
+  <circle cx="470" cy="468" r="42" fill="#1A1A1A"/>
+  <circle cx="568" cy="468" r="42" fill="#1A1A1A"/>
+  <text x="400" y="790" text-anchor="middle" fill="#1A1A1A" font-family="Arial, sans-serif" font-size="46" font-weight="700">BONNET VIPER</text>
+</svg>

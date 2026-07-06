@@ -1,0 +1,12 @@
+<svg width="800" height="900" viewBox="0 0 800 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="900" rx="48" fill="#F4EFE7"/>
+  <rect x="90" y="120" width="620" height="660" rx="40" fill="#CFC3B1"/>
+  <path d="M250 260C250 210 286 176 336 176H470C520 176 556 210 556 260V332H250V260Z" fill="#1A1A1A"/>
+  <path d="M270 342H534V640C534 690 496 728 446 728H358C308 728 270 690 270 640V342Z" fill="#2A2A2A"/>
+  <path d="M312 330H492V348C492 382 466 408 432 408H372C338 408 312 382 312 348V330Z" fill="#C4B08B"/>
+  <path d="M326 430H474V584C474 620 446 648 410 648H390C354 648 326 620 326 584V430Z" fill="#F8F1E7"/>
+  <rect x="292" y="152" width="94" height="42" rx="16" fill="#1A1A1A"/>
+  <rect x="414" y="152" width="94" height="42" rx="16" fill="#1A1A1A"/>
+  <path d="M365 300H439V334H365V300Z" fill="#D0C0A4"/>
+  <text x="400" y="798" text-anchor="middle" fill="#1A1A1A" font-family="Arial, sans-serif" font-size="48" font-weight="700">VESTE VIPER</text>
+</svg>

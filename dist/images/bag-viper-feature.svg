@@ -1,0 +1,9 @@
+<svg width="800" height="900" viewBox="0 0 800 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="900" rx="48" fill="#F4EFE7"/>
+  <rect x="220" y="220" width="360" height="430" rx="58" fill="#1F1F1F"/>
+  <path d="M290 320C290 248 348 190 420 190H450C522 190 580 248 580 320V360H290V320Z" fill="#2B2B2B"/>
+  <rect x="268" y="340" width="264" height="268" rx="50" fill="#C6B08A"/>
+  <path d="M338 392H462V468C462 498 438 522 408 522H392C362 522 338 498 338 468V392Z" fill="#251F1A"/>
+  <rect x="336" y="424" width="126" height="44" rx="18" fill="#EADFCB"/>
+  <text x="400" y="790" text-anchor="middle" fill="#1A1A1A" font-family="Arial, sans-serif" font-size="46" font-weight="700">SAC VIPER</text>
+</svg>
