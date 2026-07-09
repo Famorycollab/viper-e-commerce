@@ -96,7 +96,7 @@ function Header({ onSearch, searchQuery, onMenu, onAdminClick }: { onSearch: (q:
 
           {/* Logo */}
           <a href="#accueil" className="flex items-center gap-2.5 group" aria-label="VIPER BOUTIQUE">
-            <img src="/images/logo.png" alt="Logo VIPER BOUTIQUE" className="w-10 h-10 object-contain" />
+            <ViperMaskLogo size={40} dark={true}/>
             <span className="font-serif-display text-[15px] font-bold tracking-[0.2em] text-[#1a1a1a] uppercase">
               VIPER BOUTIQUE
             </span>
@@ -205,11 +205,11 @@ function MobileMenu({ open, onClose, onAdminClick }: { open: boolean; onClose: (
    HERO — Balenciaga-Inspired Light Luxury
    —————————————————————————————————————————————————————————— */
 const heroSlides = [
-  { image: '/images/jacket-real.jpeg', title: "Gris Perle", subtitle: 'NOUVELLE COLLECTION 2025', label: 'Jacket Softshell', price: 20000, accent: '#c4c0ba' },
-  { image: '/images/jacket-real.jpeg', title: "Beige Sable", subtitle: 'ÉLÉGANCE NATURELLE', label: 'Jacket Softshell', price: 20000, accent: '#c8b090' },
-  { image: '/images/jacket-real.jpeg', title: "Marron Café", subtitle: 'CHALEUR & CARACTÈRE', label: 'Jacket Softshell', price: 20000, accent: '#a08060' },
-  { image: '/images/jacket-real.jpeg', title: "Vert Olive", subtitle: 'STYLE TACTIQUE URBAIN', label: 'Jacket Softshell', price: 20000, accent: '#8a9a7a' },
-  { image: '/images/bag-viper-feature.svg', title: "Tactical Noir", subtitle: 'SAC SIGNATURE VIPER', label: 'Sac à Dos Premium', price: 15000, accent: '#3a3a3a' },
+  { image: '/images/jacket gris.jpeg', title: "Gris Perle", subtitle: 'NOUVELLE COLLECTION 2025', label: 'Jacket Softshell', price: 20000, accent: '#c4c0ba' },
+  { image: '/images/jacket baise.jpeg', title: "Beige Sable", subtitle: 'ÉLÉGANCE NATURELLE', label: 'Jacket Softshell', price: 20000, accent: '#c8b090' },
+  { image: '/images/jacket blanc jaune.jpeg', title: "Blanc Jaune", subtitle: 'STYLE ORIGINAL', label: 'Jacket Softshell', price: 20000, accent: '#e0d0a0' },
+  { image: '/images/jacket bleu.jpeg', title: "Bleu Navy", subtitle: 'STYLE TACTIQUE URBAIN', label: 'Jacket Softshell', price: 20000, accent: '#2c3e50' },
+  { image: '/images/sac noire.jpeg', title: "Tactical Noir", subtitle: 'SAC SIGNATURE VIPER', label: 'Sac à Dos Premium', price: 15000, accent: '#3a3a3a' },
 ];
 
 function Hero() {
