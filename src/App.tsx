@@ -95,12 +95,10 @@ function Header({ onSearch, searchQuery, onMenu, onAdminClick }: { onSearch: (q:
           </button>
 
           {/* Logo */}
-          <a href="#accueil" className="flex items-center gap-2.5 group" aria-label="VIPER WORLD">
-            <div className="w-8 h-8 flex items-center justify-center transition group-hover:opacity-70">
-              <ViperMaskLogo size={28} dark={true}/>
-            </div>
+          <a href="#accueil" className="flex items-center gap-2.5 group" aria-label="VIPER BOUTIQUE">
+            <img src="/images/logo.png" alt="Logo VIPER BOUTIQUE" className="w-10 h-10 object-contain" />
             <span className="font-serif-display text-[15px] font-bold tracking-[0.2em] text-[#1a1a1a] uppercase">
-              VIPER WORLD
+              VIPER BOUTIQUE
             </span>
           </a>
 
@@ -266,9 +264,12 @@ function Hero() {
           <h1 className="font-serif-display text-5xl sm:text-6xl md:text-7xl lg:text-[80px] font-bold text-[#1a1a1a] leading-[0.95] tracking-tight mb-2">
             {slide.label}
           </h1>
-          <h2 className="font-serif-display text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-light text-[#1a1a1a]/40 leading-[1] tracking-tight mb-8">
+          <h2 className="font-serif-display text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-light text-[#1a1a1a]/40 leading-[1] tracking-tight mb-5">
             {slide.title}
           </h2>
+          <p className="max-w-xl text-[#1a1a1a]/65 text-sm leading-relaxed mb-8">
+            Commandez facilement via WhatsApp et recevez votre produit à Bamako. Paiement à la livraison disponible.
+          </p>
 
           {/* Price */}
           <div className="flex items-baseline gap-3 mb-8">
@@ -289,9 +290,10 @@ function Hero() {
 
           {/* CTA */}
           <div className="flex flex-wrap gap-3 mb-10">
-            <a href="#boutique"
+            <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Bonjour VIPER WORLD, je souhaite commander : ${slide.label} ${slide.title}.`)}`}
+              target="_blank" rel="noopener noreferrer"
               className="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase">
-              COMMANDER <ArrowRight size={14}/>
+              COMMANDER SUR WHATSAPP <ArrowRight size={14}/>
             </a>
             <a href="#featured"
               className="btn-outline inline-flex items-center gap-2 px-8 py-4 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase">
