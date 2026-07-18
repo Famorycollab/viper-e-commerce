@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { products as defaultProducts, type Product } from '../data/products';
+import { collection, onSnapshot, doc, setDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { db } from '../config/firebase';
 
 export interface CartItem {
   product: Product;
@@ -39,41 +41,49 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<string | null>(null);
   const [productsList, setProductsList] = useState<Product[]>([]);
 
-  // Catalog version — changes when default products are updated (rename, new products, etc.)
-  const CATALOG_VERSION = 'vw-5'; // Bump this to force localStorage refresh
-
+  // 1. Restore local cart/wishlist
   useEffect(() => {
     try {
       const c = localStorage.getItem('viper-cart'); if (c) setItems(JSON.parse(c));
       const w = localStorage.getItem('viper-wish'); if (w) setWishlist(JSON.parse(w));
-      
-      const storedVersion = localStorage.getItem('viper-catalog-version');
-      const savedProducts = localStorage.getItem('viper-products');
-
-      if (storedVersion === CATALOG_VERSION && savedProducts) {
-        // Same catalog version — use saved products
-        setProductsList(JSON.parse(savedProducts));
-      } else {
-        // New catalog version or first visit — reset to defaults
-        setProductsList(defaultProducts);
-        localStorage.setItem('viper-products', JSON.stringify(defaultProducts));
-        localStorage.setItem('viper-catalog-version', CATALOG_VERSION);
-        // Also clear old cart items that may reference deleted/renamed products
-        if (storedVersion && storedVersion !== CATALOG_VERSION) {
-          setItems([]);
-          localStorage.setItem('viper-cart', '[]');
-        }
-      }
     } catch {/* */}
   }, []);
 
+  // 2. Sync Cart/Wishlist to localstorage
   useEffect(() => { localStorage.setItem('viper-cart', JSON.stringify(items)); }, [items]);
   useEffect(() => { localStorage.setItem('viper-wish', JSON.stringify(wishlist)); }, [wishlist]);
-  useEffect(() => { 
-    if (productsList.length > 0) {
-      localStorage.setItem('viper-products', JSON.stringify(productsList));
-    }
-  }, [productsList]);
+
+  // 3. Real-time Firebase Sync for products
+  useEffect(() => {
+    const productsRef = collection(db, 'products');
+    
+    // Check if products exist in Firebase, if not seed them
+    const seedProducts = async () => {
+      try {
+        const snapshot = await getDocs(productsRef);
+        if (snapshot.empty) {
+          console.log("Seeding default products to Firebase...");
+          defaultProducts.forEach(async (p) => {
+            await setDoc(doc(db, 'products', String(p.id)), p);
+          });
+        }
+      } catch (e) {
+        console.error("Firebase connection error. Ensure Firestore database is created.", e);
+      }
+    };
+    seedProducts();
+
+    const unsubscribe = onSnapshot(productsRef, (snapshot) => {
+      const dbProducts = snapshot.docs.map(doc => doc.data() as Product);
+      // Sort by id to maintain consistent order
+      dbProducts.sort((a, b) => b.id - a.id);
+      if (dbProducts.length > 0) {
+        setProductsList(dbProducts);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
 
@@ -96,31 +106,50 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const toggleWishlist = (id: number) => setWishlist(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id]);
 
-  // CRUD actions
-  const addProduct = (p: Product) => {
-    setProductsList(prev => [p, ...prev]);
-    showToast(`✓ Produit "${p.name}" créé`);
+  // CRUD actions directly writing to Firebase
+  const addProduct = async (p: Product) => {
+    try {
+      await setDoc(doc(db, 'products', String(p.id)), p);
+      showToast(`✓ Produit "${p.name}" créé`);
+    } catch (e) {
+      showToast(`✗ Erreur lors de la création`);
+      console.error(e);
+    }
   };
 
-  const updateProduct = (p: Product) => {
-    setProductsList(prev => prev.map(item => item.id === p.id ? p : item));
-    // Also update product details in the cart if modified
-    setItems(prev => prev.map(item => item.product.id === p.id ? { ...item, product: p } : item));
-    showToast(`✓ Produit "${p.name}" modifié`);
+  const updateProduct = async (p: Product) => {
+    try {
+      await setDoc(doc(db, 'products', String(p.id)), p);
+      // Update cart details silently if modified
+      setItems(prev => prev.map(item => item.product.id === p.id ? { ...item, product: p } : item));
+      showToast(`✓ Produit "${p.name}" modifié`);
+    } catch (e) {
+      showToast(`✗ Erreur lors de la modification`);
+      console.error(e);
+    }
   };
 
-  const deleteProduct = (id: number) => {
-    const p = productsList.find(item => item.id === id);
-    setProductsList(prev => prev.filter(item => item.id !== id));
-    // Also remove from cart
-    setItems(prev => prev.filter(item => item.product.id !== id));
-    if (p) showToast(`✗ Produit "${p.name}" supprimé`);
+  const deleteProduct = async (id: number) => {
+    try {
+      await deleteDoc(doc(db, 'products', String(id)));
+      // Also remove from cart
+      setItems(prev => prev.filter(item => item.product.id !== id));
+      showToast(`✗ Produit supprimé`);
+    } catch (e) {
+      showToast(`✗ Erreur lors de la suppression`);
+      console.error(e);
+    }
   };
 
-  const resetProducts = () => {
-    setProductsList(defaultProducts);
-    localStorage.setItem('viper-products', JSON.stringify(defaultProducts));
-    showToast("✓ Boutique réinitialisée aux valeurs d'origine");
+  const resetProducts = async () => {
+    try {
+      defaultProducts.forEach(async (p) => {
+        await setDoc(doc(db, 'products', String(p.id)), p);
+      });
+      showToast("✓ Boutique réinitialisée aux valeurs d'origine");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const activePriceOf = (product: Product) => {
