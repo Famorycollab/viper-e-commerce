@@ -290,7 +290,7 @@ function Hero() {
 
           {/* CTA */}
           <div className="flex flex-wrap gap-3 mb-10">
-            <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Bonjour VIPER WORLD, je souhaite commander : ${slide.label} ${slide.title}.`)}`}
+              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`🐍 *VIPER WORLD*\n\nBonjour ! 👋\nJe suis intéressé(e) par :\n\n🛍️ *${slide.label} — ${slide.title}*\n💰 Prix : *${formatPrice(slide.price)}*\n\nEst-ce disponible ? Merci ! 🙏`)}`}
               target="_blank" rel="noopener noreferrer"
               className="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase">
               COMMANDER SUR WHATSAPP <ArrowRight size={14}/>
@@ -556,7 +556,7 @@ function FeaturedProduct() {
                 className="flex-1 btn-primary py-4 rounded-full text-[11px] tracking-[0.15em] uppercase font-bold flex items-center justify-center gap-2">
                 <ShoppingBag size={15}/> Ajouter au panier
               </button>
-              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`Bonjour VIPER WORLD,\n\nJe suis intéressé(e) par l'article suivant :\n• Produit : Jacket VIPER WORLD ${color.name}\n• Taille : ${size}\n\nPourriez-vous me confirmer sa disponibilité ?`)}`}
+              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`🐍 *VIPER WORLD*\n\nBonjour ! 👋\nJe suis intéressé(e) par :\n\n🧥 *Jacket VIPER WORLD — ${color.name}*\n📏 Taille : *${size}*\n💰 Prix : *${jacket ? formatPrice(jacket.price) : formatPrice(20000)}*\n\nMerci de me confirmer la disponibilité ! 🙏`)}`}
                 target="_blank" rel="noopener noreferrer"
                 className="w-14 h-14 border border-green-300 bg-green-50 rounded-full flex items-center justify-center text-green-600 hover:bg-green-100 transition-all">
                 <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1113,144 +1113,69 @@ function Footer({ onAdminClick }: { onAdminClick: () => void }) {
 function CartDrawer() {
   const { items, isOpen, closeCart, removeFromCart, updateQuantity, totalPrice, totalItems, clearCart } = useCart();
   
-  const [step, setStep] = useState<'cart'|'shipping'|'payment'|'processing'|'done'>('cart');
+  const [step, setStep] = useState<'cart'|'shipping'|'done'>('cart');
   const [form, setForm] = useState({ name: '', phone: '', address: '', note: '' });
-  const [payMethod, setPayMethod] = useState<'online'|'whatsapp'>('online');
-  const [momoOperator, setMomoOperator] = useState<'wave'|'orange'>('wave');
-  const [momoPhone, setMomoPhone] = useState('');
-  const [processingStep, setProcessingStep] = useState(0);
   const [orderRef, setOrderRef] = useState('');
-  const [momoPin, setMomoPin] = useState('');
-  const [showMomoPrompt, setShowMomoPrompt] = useState(false);
-  const [orderSummary, setOrderSummary] = useState<{ total: number; items: any[]; payMethod: string; momoOperator: string }>({
-    total: 0,
-    items: [],
-    payMethod: 'online',
-    momoOperator: 'wave'
-  });
-  // 🔐 SÉCURITÉ PAIEMENT
-  const [secureCode, setSecureCode] = useState(''); // Code OTP affiché au client
-  const [verifyCode, setVerifyCode] = useState(''); // Saisie de vérification
-  const [verifyError, setVerifyError] = useState(false);
-  const [isProcessingLocked, setIsProcessingLocked] = useState(false); // Anti double-soumission
-  const [sessionToken, setSessionToken] = useState(''); // Jeton de session unique
+  const [orderSummary, setOrderSummary] = useState<{ total: number; items: typeof items }>({ total: 0, items: [] });
 
   const handleClose = () => { 
     closeCart(); 
     setTimeout(() => {
-      setStep('cart'); setPayMethod('online');
-      setMomoPhone('');
-      setProcessingStep(0); setShowMomoPrompt(false); setMomoPin('');
-      setSecureCode(''); setVerifyCode(''); setVerifyError(false); setIsProcessingLocked(false); setSessionToken('');
-      setOrderSummary({ total: 0, items: [], payMethod: 'online', momoOperator: 'wave' });
+      setStep('cart');
+      setOrderSummary({ total: 0, items: [] });
     }, 300); 
   };
 
-  // Génère un code OTP à 6 chiffres + jeton de session sécurisé
-  const generateSecureOrder = () => {
-    const ref = 'VPR-' + Math.floor(100000 + Math.random() * 900000);
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-    const token = btoa(`${ref}:${otp}:${Date.now()}:${totalPrice}`).slice(0, 16).toUpperCase();
-    return { ref, otp, token };
-  };
-
   const startCheckout = () => {
-    const { ref, otp, token } = generateSecureOrder();
+    const ref = 'VPR-' + Math.floor(100000 + Math.random() * 900000);
     setOrderRef(ref);
-    setSecureCode(otp);
-    setSessionToken(token);
     setStep('shipping');
   };
 
   const handleShippingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (payMethod === 'whatsapp') { triggerWhatsAppOrder(); } else { setStep('payment'); }
+    triggerWhatsAppOrder();
   };
 
   const triggerWhatsAppOrder = () => {
-    const lines = items.map(i => `• ${i.product.name}${i.size ? ` (Taille ${i.size})` : ''} ×${i.quantity} = ${formatPrice(i.product.price * i.quantity)}`);
-    const msg = encodeURIComponent(
-      `Bonjour VIPER WORLD,\n\nJe souhaite passer une commande.\n\n` +
-      `*RÉFÉRENCE :* ${orderRef}\n` +
-      `*MODE DE PAIEMENT :* Paiement à la livraison\n\n` +
-      `👤 *INFORMATIONS CLIENT*\n` +
-      `• Nom : ${form.name}\n` +
-      `• Téléphone : ${form.phone}\n` +
-      `• Adresse de livraison : ${form.address}\n` +
-      (form.note ? `• Note supplémentaire : ${form.note}\n\n` : `\n`) +
-      `🛍️ *DÉTAIL DE LA COMMANDE*\n` +
-      `${lines.join('\n')}\n\n` +
-      `💰 *TOTAL À RÉGLER : ${formatPrice(totalPrice)}*\n\n` +
-      `Merci de me confirmer la prise en compte de ma commande.`
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+    const articleLines = items.map((i, idx) =>
+      `   ${idx + 1}. ${i.product.name}${i.size ? ` — Taille : ${i.size}` : ''}\n` +
+      `      Qté : ${i.quantity} × ${formatPrice(i.product.price)} = *${formatPrice(i.product.price * i.quantity)}*`
     );
-    setOrderSummary({
-      total: totalPrice,
-      items: [...items],
-      payMethod: 'whatsapp',
-      momoOperator
-    });
+
+    const msg = encodeURIComponent(
+      `🐍 *VIPER WORLD — NOUVELLE COMMANDE*\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `📋 *Réf :* ${orderRef}\n` +
+      `📅 *Date :* ${dateStr} à ${timeStr}\n` +
+      `💳 *Paiement :* À la livraison\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `👤 *INFORMATIONS CLIENT*\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `   🏷️ Nom : *${form.name}*\n` +
+      `   📞 Tél : *${form.phone}*\n` +
+      `   📍 Adresse : *${form.address}*\n` +
+      (form.note ? `   📝 Note : ${form.note}\n` : '') +
+      `\n━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `🛍️ *ARTICLES COMMANDÉS (${totalItems})*\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `${articleLines.join('\n\n')}\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `💰 *TOTAL À PAYER : ${formatPrice(totalPrice)}*\n` +
+      `🚚 Livraison : *GRATUITE* (Bamako)\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `Bonjour l'équipe VIPER WORLD ! 👋\n` +
+      `Je souhaite passer cette commande. Merci de me confirmer la disponibilité et le délai de livraison. 🙏`
+    );
+
+    setOrderSummary({ total: totalPrice, items: [...items] });
     setStep('done');
     clearCart();
-    setTimeout(() => { window.open(`https://wa.me/${WA}?text=${msg}`, '_blank'); }, 1000);
-  };
-
-  // 🔐 Vérification du code sécurisé avant traitement
-  const verifySecureCode = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (verifyCode.trim() !== secureCode) {
-      setVerifyError(true);
-      setTimeout(() => setVerifyError(false), 2000);
-      return;
-    }
-    setVerifyError(false);
-    processOnlinePayment();
-  };
-
-  const processOnlinePayment = () => {
-    if (isProcessingLocked) return; // Anti double-soumission
-    setIsProcessingLocked(true);
-    setStep('processing'); setProcessingStep(1);
-    setTimeout(() => {
-      setProcessingStep(2);
-      setTimeout(() => {
-        setProcessingStep(3);
-        setShowMomoPrompt(true);
-      }, 1500);
-    }, 1500);
-  };
-
-  const handlePinInput = (num: string) => { if (momoPin.length < 4) setMomoPin(prev => prev + num); };
-  const handlePinDelete = () => { setMomoPin(prev => prev.slice(0, -1)); };
-  const confirmMomoPin = () => {
-    if (momoPin.length < 4) return;
-    setShowMomoPrompt(false); setProcessingStep(5);
-    setOrderSummary({
-      total: totalPrice,
-      items: [...items],
-      payMethod,
-      momoOperator
-    });
-    setTimeout(() => { setStep('done'); clearCart(); }, 2000);
-  };
-
-  const triggerPrint = () => { window.print(); };
-
-  const getReceiptWhatsAppMessage = () => {
-    const lines = orderSummary.items.map(i => `• ${i.product.name}${i.size ? ' (Taille ' + i.size + ')' : ''} ×${i.quantity} = ${formatPrice(i.product.price * i.quantity)}`);
-    const paymentStr = `Mobile Money (${orderSummary.momoOperator.toUpperCase()})`;
-    return encodeURIComponent(
-      `Bonjour VIPER WORLD,\n\nJe vous confirme le paiement de ma commande en ligne.\n\n` +
-      `*RÉFÉRENCE :* ${orderRef}\n` +
-      `*MODE DE PAIEMENT :* ${paymentStr}\n\n` +
-      `👤 *INFORMATIONS CLIENT*\n` +
-      `• Nom : ${form.name}\n` +
-      `• Téléphone : ${form.phone}\n` +
-      `• Adresse de livraison : ${form.address}\n\n` +
-      `🛍️ *DÉTAIL DE LA COMMANDE*\n` +
-      `${lines.join('\n')}\n\n` +
-      `💰 *TOTAL PAYÉ : ${formatPrice(orderSummary.total)}*\n\n` +
-      `Merci de valider l'expédition de ma commande.`
-    );
+    setTimeout(() => { window.open(`https://wa.me/${WA}?text=${msg}`, '_blank'); }, 800);
   };
 
   /* Printable invoice container */
@@ -1265,7 +1190,7 @@ function CartDrawer() {
         <div className="flex items-center gap-2">
           <ShoppingBag size={15} className="text-[#1a1a1a]/60"/>
           <h2 className="font-serif-display text-sm font-semibold tracking-wider text-[#1a1a1a] uppercase">
-            {step==='cart'?'Panier':step==='shipping'?'Livraison':step==='payment'?'Paiement':step==='processing'?'Traitement...':'Commande Validée'}
+            {step==='cart'?'Panier':step==='shipping'?'Livraison':'Commande Validée'}
           </h2>
         </div>
         <button onClick={handleClose}
@@ -1384,33 +1309,36 @@ function CartDrawer() {
               <textarea rows={2} value={form.note} onChange={e => setForm({...form,note:e.target.value})} placeholder="Instructions livraison (optionnel)"
                 className="w-full bg-white border border-[#1a1a1a]/10 rounded-xl px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/30 focus:outline-none focus:border-[#1a1a1a]/25 resize-none transition"/>
             </div>
+            {/* Mode de paiement — WhatsApp uniquement */}
             <div className="pt-2">
               <h4 className="text-[10px] text-[#1a1a1a]/45 font-bold tracking-[0.2em] uppercase mb-2.5">Mode de paiement</h4>
-              <div className="grid grid-cols-1 gap-2">
-                <button type="button" onClick={() => setPayMethod('online')}
-                  className={`rounded-2xl border p-3 text-left transition-all ${payMethod==='online' ? 'border-[#1a1a1a] bg-[#1a1a1a] text-[#fafaf8] shadow-md' : 'border-[#1a1a1a]/12 bg-white text-[#1a1a1a]/70 hover:border-[#1a1a1a]/20'}`}>
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="text-[10px] font-bold tracking-[0.2em] uppercase">Mobile Money</div>
-                      <div className={`text-[8px] mt-1 normal-case font-normal ${payMethod==='online' ? 'text-[#fafaf8]/70' : 'text-[#1a1a1a]/55'}`}>Payez rapidement avec Wave ou Orange Money</div>
-                    </div>
-                    <div className={`rounded-full px-2 py-1 text-[8px] font-bold uppercase whitespace-nowrap ${payMethod==='online' ? 'bg-white/15 text-white' : 'bg-[#f4f3f0] text-[#1a1a1a]/60'}`}>
-                      Recommandé
-                    </div>
+              <div className="rounded-2xl border border-emerald-500 bg-emerald-50 p-3.5">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+                    <svg viewBox="0 0 24 24" className="w-5 h-5 text-emerald-600 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                   </div>
-                </button>
-                <button type="button" onClick={() => setPayMethod('whatsapp')}
-                  className={`rounded-2xl border p-3 text-left transition-all ${payMethod==='whatsapp' ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm' : 'border-[#1a1a1a]/12 bg-white text-[#1a1a1a]/70 hover:border-[#1a1a1a]/20'}`}>
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="text-[10px] font-bold tracking-[0.2em] uppercase">WhatsApp</div>
-                      <div className={`text-[8px] mt-1 normal-case font-normal ${payMethod==='whatsapp' ? 'text-emerald-700/70' : 'text-[#1a1a1a]/55'}`}>Confirmez votre commande à la livraison</div>
-                    </div>
-                    <div className={`rounded-full px-2 py-1 text-[8px] font-bold uppercase whitespace-nowrap ${payMethod==='whatsapp' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#f4f3f0] text-[#1a1a1a]/60'}`}>
-                      Simple
-                    </div>
+                  <div>
+                    <div className="text-[11px] font-bold text-emerald-700 tracking-wide">Commander via WhatsApp</div>
+                    <div className="text-[9px] text-emerald-600/70 mt-0.5">Votre commande sera envoyée sur WhatsApp · Paiement à la livraison</div>
                   </div>
-                </button>
+                  <Check size={16} className="text-emerald-600 shrink-0 ml-auto" />
+                </div>
+              </div>
+            </div>
+
+            {/* Récapitulatif rapide */}
+            <div className="bg-[#f4f3f0] border border-[#1a1a1a]/05 rounded-xl p-3 space-y-1.5">
+              <div className="flex justify-between text-[11px]">
+                <span className="text-[#1a1a1a]/45">{totalItems} article{totalItems > 1 ? 's' : ''}</span>
+                <span className="font-semibold text-[#1a1a1a]">{formatPrice(totalPrice)}</span>
+              </div>
+              <div className="flex justify-between text-[11px]">
+                <span className="text-[#1a1a1a]/45">Livraison (Bamako)</span>
+                <span className="font-semibold text-emerald-600">Gratuite</span>
+              </div>
+              <div className="border-t border-[#1a1a1a]/08 pt-1.5 flex justify-between">
+                <span className="text-[12px] font-bold text-[#1a1a1a]">Total à payer</span>
+                <span className="font-serif-display text-base font-bold text-[#1a1a1a]">{formatPrice(totalPrice)}</span>
               </div>
             </div>
           </div>
@@ -1420,181 +1348,12 @@ function CartDrawer() {
               Retour
             </button>
             <button type="submit"
-              className={`w-2/3 font-bold py-3 rounded-full text-[10px] tracking-wider uppercase flex items-center justify-center gap-1.5 transition-all shadow-lg ${payMethod==='whatsapp' ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'btn-primary'}`}>
-              {payMethod==='whatsapp' ? <>WhatsApp <ChevronRight size={12}/></> : <>Paiement <ChevronRight size={12}/></>}
+              className="w-2/3 font-bold py-3.5 rounded-full text-[10px] tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg bg-emerald-500 hover:bg-emerald-600 text-white">
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Envoyer la commande
             </button>
           </div>
         </form>
-      )}
-
-      {/* PAYMENT SCREEN */}
-      {step === 'payment' && (
-        <div className="flex-1 flex flex-col overflow-hidden print:hidden">
-          {/* 🔐 Bandeau sécurité */}
-          <div className="bg-emerald-50 border-b border-emerald-200 px-4 py-2.5 flex items-center gap-2">
-            <Shield size={13} className="text-emerald-600 shrink-0"/>
-            <div>
-              <p className="text-[9px] text-emerald-700 font-bold uppercase tracking-wider">Paiement 100% Sécurisé</p>
-              <p className="text-[8px] text-emerald-600/70">Session chiffrée · Token: {sessionToken}</p>
-            </div>
-          </div>
-          <form onSubmit={verifySecureCode} className="flex-1 flex flex-col justify-between overflow-hidden">
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            <h3 className="text-[10px] text-[#8B6914] font-bold tracking-[0.2em] uppercase border-b border-[#1a1a1a]/06 pb-2">
-              Paiement sécurisé
-            </h3>
-            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-white p-3">
-              <div className="flex items-start gap-2">
-                <div className="rounded-full bg-emerald-600/10 p-1.5">
-                  <Shield size={14} className="text-emerald-600"/>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-emerald-700">Paiement Mobile Money sécurisé</p>
-                  <p className="text-[8px] mt-1 leading-relaxed text-emerald-700/70">Sélectionnez votre opérateur, validez le code puis confirmez la transaction. Le parcours reste simple et rapide.</p>
-                </div>
-              </div>
-            </div>
-            {(
-              <div className="space-y-4 animate-scale-in">
-                <div>
-                  <label className="block text-[9px] text-[#1a1a1a]/40 font-bold uppercase tracking-wider mb-2">Opérateur</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button type="button" onClick={() => setMomoOperator('wave')}
-                      className={`py-3 rounded-xl border flex flex-col items-center justify-center transition-all ${momoOperator==='wave' ? 'border-blue-400 bg-blue-50 text-blue-600' : 'border-[#1a1a1a]/10 bg-white text-[#1a1a1a]/45'}`}>
-                      <span className="font-bold text-sm tracking-wider">WAVE</span>
-                      <span className="text-[8px] font-medium opacity-65">Frais 1%</span>
-                    </button>
-                    <button type="button" onClick={() => setMomoOperator('orange')}
-                      className={`py-3 rounded-xl border flex flex-col items-center justify-center transition-all ${momoOperator==='orange' ? 'border-orange-400 bg-orange-50 text-orange-600' : 'border-[#1a1a1a]/10 bg-white text-[#1a1a1a]/45'}`}>
-                      <span className="font-bold text-sm tracking-wider">ORANGE</span>
-                      <span className="text-[8px] font-medium opacity-65">Frais 0%</span>
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[9px] text-[#1a1a1a]/40 font-bold uppercase tracking-wider mb-1.5">Numéro du compte</label>
-                  <div className="relative">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#1a1a1a]/35 text-xs font-semibold">+223</span>
-                    <input required type="tel" value={momoPhone} onChange={e => setMomoPhone(e.target.value.replace(/[^0-9]/g,''))} placeholder="Numéro Mobile Money *"
-                      className="w-full bg-white border border-[#1a1a1a]/10 rounded-xl pl-14 pr-4 py-3 text-sm text-[#1a1a1a] placeholder-[#1a1a1a]/25 focus:outline-none focus:border-[#1a1a1a]/25 transition"/>
-                  </div>
-                  <p className="text-[9px] text-[#1a1a1a]/30 mt-1.5">Demande Push envoyée sur ce numéro.</p>
-                </div>
-              </div>
-            )}
-            <div className="bg-[#f4f3f0] border border-[#1a1a1a]/05 rounded-xl p-3 flex justify-between text-xs items-center">
-              <span className="text-[#1a1a1a]/45">Total de votre commande :</span>
-              <span className="font-serif-display font-semibold text-[#1a1a1a] text-base">{formatPrice(totalPrice)}</span>
-            </div>
-
-            {/* 🔐 Bloc Code de Confirmation Sécurisé */}
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
-              <div className="flex items-start gap-2">
-                <Shield size={15} className="text-amber-600 mt-0.5 shrink-0"/>
-                <div>
-                  <p className="text-[9px] text-amber-700 font-bold uppercase tracking-wider">Votre Code de Confirmation</p>
-                  <p className="text-[8px] text-amber-600/70 mt-0.5">Communiquez ce code à notre équipe WhatsApp avant de payer.</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-center">
-                <div className="bg-white border-2 border-amber-300 rounded-xl px-6 py-3 shadow-sm">
-                  <p className="font-mono text-2xl font-bold text-amber-700 tracking-[0.3em]">{secureCode}</p>
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="block text-[9px] text-[#1a1a1a]/55 font-bold uppercase tracking-wider">Confirmez le code pour valider :</label>
-                <input
-                  type="text" inputMode="numeric" maxLength={6}
-                  value={verifyCode}
-                  onChange={e => setVerifyCode(e.target.value.replace(/[^0-9]/g, ''))}
-                  placeholder="Saisissez votre code à 6 chiffres *"
-                  className={`w-full bg-white border rounded-xl px-4 py-2.5 text-sm text-center font-mono font-bold tracking-widest focus:outline-none transition ${verifyError ? 'border-red-400 bg-red-50 text-red-600 shake' : 'border-[#1a1a1a]/15 text-[#1a1a1a] focus:border-amber-400'}`}
-                />
-                {verifyError && <p className="text-[10px] text-red-500 font-semibold text-center">❌ Code incorrect. Vérifiez et réessayez.</p>}
-              </div>
-            </div>
-
-          </div>
-          <div className="border-t border-[#1a1a1a]/06 p-4 flex gap-3 bg-white">
-            <button type="button" onClick={() => setStep('shipping')}
-              className="w-1/3 border border-[#1a1a1a]/12 text-[#1a1a1a]/55 font-semibold py-3 rounded-full text-[10px] tracking-wider uppercase hover:bg-[#f4f3f0] transition">
-              Retour
-            </button>
-            <button type="submit" disabled={verifyCode.length < 6}
-              className={`w-2/3 py-3 rounded-full text-[10px] tracking-wider uppercase font-bold flex items-center justify-center gap-1.5 shadow-lg transition-all ${
-                verifyCode.length === 6 ? 'btn-primary' : 'bg-[#1a1a1a]/20 text-[#fafaf8]/50 cursor-not-allowed'
-              }`}>
-              <Shield size={12}/> Payer {formatPrice(totalPrice)}
-            </button>
-          </div>
-          </form>
-        </div>
-      )}
-
-      {/* PROCESSING SCREEN */}
-      {step === 'processing' && (
-        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center print:hidden bg-[#fafaf8] animate-fade-in relative overflow-hidden">
-          {!showMomoPrompt ? (
-            <div className="space-y-6 max-w-xs animate-scale-in">
-              <div className="relative w-14 h-14 mx-auto">
-                <div className="absolute inset-0 border-[2px] border-[#1a1a1a]/08 rounded-full"/>
-                <div className="absolute inset-0 border-[2px] border-[#1a1a1a] border-t-transparent rounded-full animate-spin"/>
-              </div>
-              <div className="space-y-2">
-                <p className="text-[10px] text-[#8B6914] font-bold tracking-[0.2em] uppercase">Traitement en cours</p>
-                <h4 className="text-sm font-medium text-[#1a1a1a]">
-                  {processingStep === 1 && "Connexion sécurisée..."}
-                  {processingStep === 2 && "Vérification des informations..."}
-                  {processingStep === 3 && "Demande Push Mobile Money..."}
-                  {processingStep === 4 && "Débit en cours..."}
-                </h4>
-                <p className="text-[10px] text-[#1a1a1a]/35">Ne fermez pas cette fenêtre.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-6 w-full animate-scale-in">
-              <p className="text-[10px] text-[#8B6914] font-bold tracking-[0.2em] uppercase">Notification Push envoyée</p>
-              <div className="phone-mockup">
-                <div className="momo-screen">
-                  <div className={`text-xs font-bold px-3 py-1 rounded-full mb-3 ${momoOperator==='wave'?'bg-blue-500/20 text-blue-400':'bg-orange-500/20 text-orange-500'}`}>
-                    {momoOperator === 'wave' ? 'Wave Mobile' : 'Orange Money'}
-                  </div>
-                  <p className="text-[10px] text-[#fafaf8]/70 text-center mb-4">
-                    Confirmez le paiement de <br/>
-                    <strong className="text-[#fafaf8] text-xs">{formatPrice(totalPrice)}</strong> <br/>
-                    pour <span className="text-[#c8a97e] font-semibold">VIPER WORLD</span>
-                  </p>
-                  <div className="flex gap-3.5 mb-5">
-                    {[...Array(4)].map((_,i) => (
-                      <div key={i} className={`w-3.5 h-3.5 rounded-full border border-[#c8a97e]/30 flex items-center justify-center transition-all ${momoPin.length > i ? 'bg-[#c8a97e]' : 'bg-transparent'}`}/>
-                    ))}
-                  </div>
-                  <p className="text-[9px] text-[#fafaf8]/40 mb-1">Saisissez votre code PIN</p>
-                </div>
-              </div>
-              <div className="max-w-[240px] mx-auto grid grid-cols-3 gap-2 pb-2">
-                {['1','2','3','4','5','6','7','8','9'].map(n => (
-                  <button key={n} type="button" onClick={() => handlePinInput(n)}
-                    className="w-16 h-10 bg-[#f4f3f0] hover:bg-[#eeede9] active:bg-[#e8e7e2] rounded-lg text-sm text-[#1a1a1a] font-semibold border border-[#1a1a1a]/06 flex items-center justify-center transition-all">
-                    {n}
-                  </button>
-                ))}
-                <button type="button" onClick={handlePinDelete}
-                  className="w-16 h-10 bg-red-50 hover:bg-red-100 rounded-lg text-[10px] text-red-500 font-bold uppercase border border-red-200/50 flex items-center justify-center">
-                  Eff.
-                </button>
-                <button type="button" onClick={() => handlePinInput('0')}
-                  className="w-16 h-10 bg-[#f4f3f0] hover:bg-[#eeede9] rounded-lg text-sm text-[#1a1a1a] font-semibold border border-[#1a1a1a]/06 flex items-center justify-center">
-                  0
-                </button>
-                <button type="button" onClick={confirmMomoPin} disabled={momoPin.length < 4}
-                  className={`w-16 h-10 rounded-lg text-[10px] font-bold uppercase border flex items-center justify-center transition-all ${momoPin.length === 4 ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg' : 'bg-emerald-50 border-emerald-200/50 text-emerald-300 cursor-not-allowed'}`}>
-                  OK
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
       )}
 
       {/* DONE SCREEN */}
@@ -1605,7 +1364,7 @@ function CartDrawer() {
               <Check size={26} className="text-emerald-600"/>
             </div>
             <div className="space-y-1">
-              <h3 className="font-serif-display text-xl font-bold text-[#1a1a1a]">Commande validée !</h3>
+              <h3 className="font-serif-display text-xl font-bold text-[#1a1a1a]">Commande envoyée ! 🎉</h3>
               <p className="text-[#1a1a1a]/45 text-xs">Merci pour votre commande chez VIPER WORLD.</p>
               <div className="inline-block bg-[#f4f3f0] text-[#1a1a1a] text-[10px] font-mono px-3.5 py-1 rounded-md border border-[#1a1a1a]/08 mt-2">
                 Réf : {orderRef}
@@ -1616,36 +1375,29 @@ function CartDrawer() {
               <div className="flex justify-between"><span className="text-[#1a1a1a]/50">Client :</span><span className="font-medium text-[#1a1a1a]">{form.name}</span></div>
               <div className="flex justify-between"><span className="text-[#1a1a1a]/50">Téléphone :</span><span className="font-medium text-[#1a1a1a]">{form.phone}</span></div>
               <div className="flex justify-between"><span className="text-[#1a1a1a]/50">Adresse :</span><span className="font-medium text-[#1a1a1a] truncate max-w-[200px]">{form.address}</span></div>
-              <div className="flex justify-between"><span className="text-[#1a1a1a]/50">Paiement :</span><span className="font-medium text-emerald-600">{payMethod==='whatsapp'?'À la livraison':'Mobile Money'}</span></div>
+              <div className="flex justify-between"><span className="text-[#1a1a1a]/50">Paiement :</span><span className="font-medium text-emerald-600">À la livraison</span></div>
               <div className="border-t border-[#1a1a1a]/06 pt-2 flex justify-between font-bold text-sm">
                 <span className="text-[#1a1a1a]">Montant total :</span>
                 <span className="text-[#1a1a1a]">{formatPrice(orderSummary.total)}</span>
               </div>
             </div>
-            <p className="text-[10px] text-[#1a1a1a]/35 leading-relaxed px-2">
-              {payMethod === 'whatsapp'
-                ? "L'application WhatsApp va s'ouvrir pour confirmer votre commande avec notre équipe."
-                : "Le paiement a été traité. Vous pouvez télécharger votre reçu ou l'envoyer par WhatsApp."}
-            </p>
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-left">
+              <div className="flex items-start gap-2">
+                <svg viewBox="0 0 24 24" className="w-4 h-4 text-emerald-600 fill-current mt-0.5 shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <div>
+                  <p className="text-[10px] text-emerald-700 font-bold">WhatsApp va s'ouvrir automatiquement</p>
+                  <p className="text-[9px] text-emerald-600/70 mt-0.5 leading-relaxed">Votre commande détaillée sera pré-remplie. Envoyez le message pour confirmer avec notre équipe.</p>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="border-t border-[#1a1a1a]/06 p-4 space-y-2 bg-white">
-            {payMethod === 'online' && (<>
-              <button onClick={() => window.open(`https://wa.me/${WA}?text=${getReceiptWhatsAppMessage()}`, '_blank')}
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-full text-[10px] tracking-wider uppercase flex items-center justify-center gap-1.5">
-                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Envoyer sur WhatsApp
+            <button onClick={handleClose}
+              className="w-full btn-primary py-3 rounded-full text-[10px] tracking-wider uppercase font-bold shadow-md">
+              Retourner à la boutique
             </button>
-            <button onClick={triggerPrint}
-              className="w-full border border-[#1a1a1a]/12 text-[#1a1a1a] font-bold py-3 rounded-full text-[10px] tracking-wider uppercase hover:bg-[#f4f3f0] transition-all flex items-center justify-center gap-1.5">
-              📥 Télécharger le Reçu
-            </button>
-          </>)}
-          <button onClick={handleClose}
-            className="w-full btn-primary py-3 rounded-full text-[10px] tracking-wider uppercase font-bold shadow-md">
-            Retourner à la boutique
-          </button>
+          </div>
         </div>
-      </div>
       )}
     </div>
   </>);

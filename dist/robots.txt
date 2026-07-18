@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://viper-e-commerce-2yjy.vercel.app/sitemap.xml
