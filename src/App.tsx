@@ -170,7 +170,7 @@ function MobileMenu({ open, onClose, onAdminClick }: { open: boolean; onClose: (
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-2.5">
             <ViperMaskLogo size={24} dark={true}/>
-            <span className="font-serif-display text-base font-bold tracking-[0.2em] text-[#1a1a1a] uppercase">VIPER WORLD</span>
+            <span className="font-serif-display text-base font-bold tracking-[0.2em] text-[#1a1a1a] uppercase">VIPER WORLDS</span>
           </div>
           <button onClick={onClose} className="text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition"><X size={20}/></button>
         </div>
@@ -252,7 +252,7 @@ function Hero() {
           {/* Brand tag */}
           <div className="flex items-center gap-2 mb-10">
             <div className="w-8 h-px bg-[#1a1a1a]/30"/>
-            <span className="text-[#1a1a1a]/45 text-[9px] font-bold tracking-[0.4em] uppercase">VIPER WORLD — Bamako</span>
+            <span className="text-[#1a1a1a]/45 text-[9px] font-bold tracking-[0.4em] uppercase">VIPER WORLDS — Bamako</span>
           </div>
 
           {/* Collection label */}
@@ -290,7 +290,7 @@ function Hero() {
 
           {/* CTA */}
           <div className="flex flex-wrap gap-3 mb-10">
-              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`🐍 *VIPER WORLD*\n\nBonjour ! 👋\nJe suis intéressé(e) par :\n\n🛍️ *${slide.label} — ${slide.title}*\n💰 Prix : *${formatPrice(slide.price)}*\n\nEst-ce disponible ? Merci ! 🙏`)}`}
+              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`🐍 *VIPER WORLDS*\n\nBonjour ! 👋\nJe suis intéressé(e) par :\n\n🛍️ *${slide.label} — ${slide.title}*\n💰 Prix : *${formatPrice(slide.price)}*\n\nEst-ce disponible ? Merci ! 🙏`)}`}
               target="_blank" rel="noopener noreferrer"
               className="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-full text-[11px] font-bold tracking-[0.15em] uppercase">
               COMMANDER SUR WHATSAPP <ArrowRight size={14}/>
@@ -343,7 +343,7 @@ function Hero() {
           <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4">
             <div className="w-px h-16 bg-[#1a1a1a]/10"/>
             <span className="text-[9px] text-[#1a1a1a]/30 font-bold tracking-[0.35em] uppercase" style={{writingMode:'vertical-rl',textOrientation:'mixed'}}>
-              VIPER WORLD — Mali
+              VIPER WORLDS — Mali
             </span>
             <div className="w-px h-16 bg-[#1a1a1a]/10"/>
           </div>
@@ -389,7 +389,7 @@ function Features() {
 
 function ServiceHighlights() {
   return (
-    <section className="py-20 bg-[#fafaf8]" aria-label="Pourquoi choisir VIPER WORLD">
+    <section className="py-20 bg-[#fafaf8]" aria-label="Pourquoi choisir VIPER WORLDS">
       <div className="max-w-[1400px] mx-auto px-6 sm:px-10">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-[9px] font-bold tracking-[0.45em] uppercase text-[#8B6914] mb-3 block">Service premium</span>
@@ -445,7 +445,7 @@ function FeaturedProduct() {
           <span className="text-[9px] font-bold tracking-[0.45em] uppercase text-[#8B6914] mb-3 block">Collection Vedette</span>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <h2 className="font-serif-display text-4xl md:text-5xl lg:text-6xl text-[#1a1a1a] font-bold">
-              Jackets <span className="text-gradient-gold">VIPER WORLD</span>
+              Jackets <span className="text-gradient-gold">VIPER WORLDS</span>
             </h2>
             <p className="text-[#1a1a1a]/45 text-sm max-w-xs">Technique premium. Imperméable, coupe-vent, et style unique.</p>
           </div>
@@ -464,7 +464,7 @@ function FeaturedProduct() {
                 <img
                   key={color.id}
                   src={color.image}
-                  alt={`Jacket VIPER WORLD ${color.name}`}
+                  alt={`Jacket VIPER WORLDS ${color.name}`}
                   className={`w-full h-full object-cover transition-all duration-600 ${imgLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
                   onLoad={() => setImgLoaded(true)}
                   style={{filter:'drop-shadow(0 20px 40px rgba(0,0,0,0.12))'}}
@@ -489,7 +489,7 @@ function FeaturedProduct() {
             <div>
               <p className="text-[10px] font-bold tracking-[0.35em] uppercase text-[#8B6914] mb-2">Collection Premium</p>
               <h3 className="font-serif-display text-3xl md:text-4xl text-[#1a1a1a] font-semibold leading-tight">
-                Jacket VIPER WORLD
+                Jacket VIPER WORLDS
               </h3>
               <p className="text-[#1a1a1a]/40 mt-1 font-serif-display text-xl">{color.name}</p>
             </div>
@@ -556,7 +556,7 @@ function FeaturedProduct() {
                 className="flex-1 btn-primary py-4 rounded-full text-[11px] tracking-[0.15em] uppercase font-bold flex items-center justify-center gap-2">
                 <ShoppingBag size={15}/> Ajouter au panier
               </button>
-              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`🐍 *VIPER WORLD*\n\nBonjour ! 👋\nJe suis intéressé(e) par :\n\n🧥 *Jacket VIPER WORLD — ${color.name}*\n📏 Taille : *${size}*\n💰 Prix : *${jacket ? formatPrice(jacket.price) : formatPrice(20000)}*\n\nMerci de me confirmer la disponibilité ! 🙏`)}`}
+              <a href={`https://wa.me/${WA}?text=${encodeURIComponent(`🐍 *VIPER WORLDS*\n\nBonjour ! 👋\nJe suis intéressé(e) par :\n\n🧥 *Jacket VIPER WORLDS — ${color.name}*\n📏 Taille : *${size}*\n💰 Prix : *${jacket ? formatPrice(jacket.price) : formatPrice(20000)}*\n\nMerci de me confirmer la disponibilité ! 🙏`)}`}
                 target="_blank" rel="noopener noreferrer"
                 className="w-14 h-14 border border-green-300 bg-green-50 rounded-full flex items-center justify-center text-green-600 hover:bg-green-100 transition-all">
                 <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -866,10 +866,10 @@ function About() {
             </h2>
             <div className="w-12 h-px bg-[#1a1a1a]/12 mb-5"/>
             <p className="text-[#1a1a1a]/60 leading-relaxed mb-3 text-sm">
-              VIPER WORLD est une marque de streetwear premium née à Bamako, Mali. Créée par des passionnés de culture urbaine, chaque pièce est conçue pour affirmer votre style avec élégance.
+              VIPER WORLDS est une marque de streetwear premium née à Bamako, Mali. Créée par des passionnés de culture urbaine, chaque pièce est conçue pour affirmer votre style avec élégance.
             </p>
             <p className="text-[#1a1a1a]/50 leading-relaxed mb-8 text-sm">
-              Des jackets techniques VIPER WORLD aux sacs tactiques — nous combinons qualité premium et accessibilité, tout en restant fidèles à l'identité africaine contemporaine.
+              Des jackets techniques VIPER WORLDS aux sacs tactiques — nous combinons qualité premium et accessibilité, tout en restant fidèles à l'identité africaine contemporaine.
             </p>
             <div className="grid grid-cols-3 gap-3">
               {[{n:'1000+',l:'Clients satisfaits'},{n:'12+',l:'Références'},{n:'4.9',l:'Note sur 5'}].map(({n,l}) => (
@@ -892,7 +892,7 @@ function About() {
                 className="w-full h-full object-cover"
               >
                 <source src="/videos/viper-spirit.mp4" type="video/mp4" />
-                <img src="/images/jacket-real.jpeg" alt="Jacket VIPER WORLD Collection" className="w-full h-full object-cover" />
+                <img src="/images/jacket-real.jpeg" alt="Jacket VIPER WORLDS Collection" className="w-full h-full object-cover" />
               </video>
             </div>
             {/* Floating info card */}
@@ -900,7 +900,7 @@ function About() {
               <div className="flex items-center gap-3">
                 <ViperMaskLogo size={28} dark={true}/>
                 <div>
-                  <p className="font-serif-display text-sm text-[#1a1a1a] font-semibold">VIPER WORLD</p>
+                  <p className="font-serif-display text-sm text-[#1a1a1a] font-semibold">VIPER WORLDS</p>
                   <p className="text-[9px] text-[#1a1a1a]/40 tracking-wider uppercase">Bamako, Mali — Premium Streetwear</p>
                 </div>
               </div>
@@ -920,12 +920,12 @@ function Testimonials() {
       <div ref={ref} className="reveal max-w-[1400px] mx-auto px-6 sm:px-10">
         <div className="mb-12">
           <span className="text-[9px] font-bold tracking-[0.45em] uppercase text-[#8B6914] mb-3 block">Avis Clients</span>
-          <h2 className="font-serif-display text-3xl md:text-4xl text-[#1a1a1a] font-semibold">Ils adorent VIPER WORLD</h2>
+          <h2 className="font-serif-display text-3xl md:text-4xl text-[#1a1a1a] font-semibold">Ils adorent VIPER WORLDS</h2>
           <div className="w-12 h-px bg-[#1a1a1a]/10 mt-4"/>
         </div>
         <div className="grid md:grid-cols-3 gap-5 stagger-children visible">
           {[
-            {n:'Amadou D.',t:'La veste VIPER WORLD est incroyable ! Qualité premium, coupe parfaite et le logo est magnifique. La meilleure veste que j\'ai eue.',r:5,item:'Veste Gris Perle'},
+            {n:'Amadou D.',t:'La veste VIPER WORLDS est incroyable ! Qualité premium, coupe parfaite et le logo est magnifique. La meilleure veste que j\'ai eue.',r:5,item:'Veste Gris Perle'},
             {n:'Fatou N.',t:'Le sac Tactical est solide et stylé. Parfait pour mes cours. J\'ai aussi pris un bonnet, je suis fan de la marque !',r:5,item:'Sac Tactical'},
             {n:'Ibrahima S.',t:'Enfin du vrai streetwear au Mali ! Les vestes sont imperméables et le design est unique. Service client au top via WhatsApp.',r:5,item:'Veste Vert Olive'},
           ].map((r,i) => (
@@ -1053,7 +1053,7 @@ function Footer({ onAdminClick }: { onAdminClick: () => void }) {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
               <ViperMaskLogo size={22} dark={false}/>
-              <span className="font-serif-display text-sm font-bold tracking-[0.2em] text-[#fafaf8] uppercase">VIPER WORLD</span>
+              <span className="font-serif-display text-sm font-bold tracking-[0.2em] text-[#fafaf8] uppercase">VIPER WORLDS</span>
             </div>
             <p className="text-[11px] text-[#fafaf8]/35 leading-relaxed">
               Streetwear premium à Bamako.<br/>Vestes & sacs — Affirmez votre style.
@@ -1101,7 +1101,7 @@ function Footer({ onAdminClick }: { onAdminClick: () => void }) {
           </div>
         </div>
         <div className="border-t border-[#fafaf8]/06 pt-5 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p className="text-[9px] text-[#fafaf8]/25">© 2025–2026 VIPER WORLD. Tous droits réservés.</p>
+          <p className="text-[9px] text-[#fafaf8]/25">© 2025–2026 VIPER WORLDS. Tous droits réservés.</p>
           <p className="text-[9px] text-[#fafaf8]/20 font-cormorant italic">Fait avec 🐍 à Bamako, Mali</p>
         </div>
       </div>
@@ -1148,7 +1148,7 @@ function CartDrawer() {
     );
 
     const msg = encodeURIComponent(
-      `🐍 *VIPER WORLD — NOUVELLE COMMANDE*\n` +
+      `🐍 *VIPER WORLDS — NOUVELLE COMMANDE*\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
       `📋 *Réf :* ${orderRef}\n` +
       `📅 *Date :* ${dateStr} à ${timeStr}\n` +
@@ -1168,7 +1168,7 @@ function CartDrawer() {
       `💰 *TOTAL À PAYER : ${formatPrice(totalPrice)}*\n` +
       `🚚 Livraison : *GRATUITE* (Bamako)\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-      `Bonjour l'équipe VIPER WORLD ! 👋\n` +
+      `Bonjour l'équipe VIPER WORLDS ! 👋\n` +
       `Je souhaite passer cette commande. Merci de me confirmer la disponibilité et le délai de livraison. 🙏`
     );
 
@@ -1202,7 +1202,7 @@ function CartDrawer() {
       {/* Print invoice */}
       <div className="hidden print-invoice-container print:block text-black bg-white p-8">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold tracking-[0.1em] border-b pb-2 mb-1">VIPER WORLD</h1>
+          <h1 className="text-2xl font-bold tracking-[0.1em] border-b pb-2 mb-1">VIPER WORLDS</h1>
           <p className="text-xs text-gray-500">Streetwear Premium — Bamako, Mali</p>
           <p className="text-[10px] text-gray-500">{PHONE}</p>
         </div>
@@ -1223,7 +1223,7 @@ function CartDrawer() {
           ))}
           <div className="flex justify-between font-bold pt-3 text-sm"><span>TOTAL :</span><span>{formatPrice(totalPrice)}</span></div>
         </div>
-        <div className="text-center text-[10px] text-gray-400 mt-12 border-t pt-4">Merci pour votre confiance ! VIPER WORLD 🚀</div>
+        <div className="text-center text-[10px] text-gray-400 mt-12 border-t pt-4">Merci pour votre confiance ! VIPER WORLDS 🚀</div>
       </div>
 
       {/* CART SCREEN */}
@@ -1365,7 +1365,7 @@ function CartDrawer() {
             </div>
             <div className="space-y-1">
               <h3 className="font-serif-display text-xl font-bold text-[#1a1a1a]">Commande envoyée ! 🎉</h3>
-              <p className="text-[#1a1a1a]/45 text-xs">Merci pour votre commande chez VIPER WORLD.</p>
+              <p className="text-[#1a1a1a]/45 text-xs">Merci pour votre commande chez VIPER WORLDS.</p>
               <div className="inline-block bg-[#f4f3f0] text-[#1a1a1a] text-[10px] font-mono px-3.5 py-1 rounded-md border border-[#1a1a1a]/08 mt-2">
                 Réf : {orderRef}
               </div>
@@ -1587,7 +1587,7 @@ function AdminPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
               </div>
               <div>
                 <h3 className="font-serif-display text-xl font-bold text-[#1a1a1a]">Connexion Espace Admin</h3>
-                <p className="text-[10px] text-[#1a1a1a]/40 uppercase tracking-widest mt-1">VIPER WORLD Manager</p>
+                <p className="text-[10px] text-[#1a1a1a]/40 uppercase tracking-widest mt-1">VIPER WORLDS Manager</p>
               </div>
               <div className="space-y-2 text-left">
                 <input required type="password" value={password} onChange={e => setPassword(e.target.value)}
@@ -1611,7 +1611,7 @@ function AdminPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-3">
                 <div>
                   <h3 className="font-serif-display text-2xl font-bold text-[#1a1a1a]">Gestion du Catalogue</h3>
-                  <p className="text-[10px] text-[#8B6914] font-bold tracking-[0.2em] uppercase">Espace Administrateur VIPER WORLD</p>
+                  <p className="text-[10px] text-[#8B6914] font-bold tracking-[0.2em] uppercase">Espace Administrateur VIPER WORLDS</p>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleOpenForm()}

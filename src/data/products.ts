@@ -36,44 +36,44 @@ export const jacketColors = [
 export const products: Product[] = [
   // ——— VESTES ———
   {
-    id: 101, name: "Veste VIPER WORLD — Beige Sable", price: 20000, oldPrice: 24000, category: 'vestes',
+    id: 101, name: "Veste VIPER WORLDS — Beige Sable", price: 20000, oldPrice: 24000, category: 'vestes',
     image: '/images/jacket baise.jpeg', images: ['/images/jacket baise.jpeg', '/images/jacket baise.jpeg'],
-    description: "Veste technique premium VIPER WORLD. Idéale pour affronter les intempéries avec style.",
+    description: "Veste technique premium VIPER WORLDS. Idéale pour affronter les intempéries avec style.",
     details: ['Tissu softshell imperméable', 'Capuche ajustable', 'Logo Viper brodé', 'Fermeture éclair premium'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'], badge: '✨ Nouveau', stock: 20, rating: 4.9, reviews: 87, color: 'Beige Sable', colorHex: '#c8b090'
   },
   {
-    id: 102, name: "Veste VIPER WORLD — Blanc Jaune", price: 20000, category: 'vestes',
+    id: 102, name: "Veste VIPER WORLDS — Blanc Jaune", price: 20000, category: 'vestes',
     image: '/images/jacket blanc jaune.jpeg', images: ['/images/jacket blanc jaune.jpeg', '/images/jacket blanc jaune.jpeg'],
-    description: "Veste bicolore VIPER WORLD, combinant blanc et jaune pour un style original.",
+    description: "Veste bicolore VIPER WORLDS, combinant blanc et jaune pour un style original.",
     details: ['Tissu softshell imperméable', 'Capuche ajustable', 'Logo Viper brodé', 'Fermeture éclair premium'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'], stock: 15, rating: 4.8, reviews: 45, color: 'Blanc Jaune', colorHex: '#e0d0a0'
   },
   {
-    id: 103, name: "Veste VIPER WORLD — Blanc Arctic", price: 20000, category: 'vestes',
+    id: 103, name: "Veste VIPER WORLDS — Blanc Arctic", price: 20000, category: 'vestes',
     image: '/images/jacket blanc.jpeg', images: ['/images/jacket blanc.jpeg', '/images/jacket blanc.jpeg'],
-    description: "Veste VIPER WORLD couleur Blanc Arctic, épurée et moderne.",
+    description: "Veste VIPER WORLDS couleur Blanc Arctic, épurée et moderne.",
     details: ['Tissu softshell imperméable', 'Capuche ajustable', 'Logo Viper brodé', 'Fermeture éclair premium'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'], stock: 18, rating: 4.7, reviews: 32, color: 'Blanc Arctic', colorHex: '#ffffff'
   },
   {
-    id: 104, name: "Veste VIPER WORLD — Bleu Navy", price: 20000, category: 'vestes',
+    id: 104, name: "Veste VIPER WORLDS — Bleu Navy", price: 20000, category: 'vestes',
     image: '/images/jacket bleu.jpeg', images: ['/images/jacket bleu.jpeg', '/images/jacket bleu.jpeg'],
-    description: "Veste VIPER WORLD bleu navy élégante, parfaite pour un look streetwear raffiné.",
+    description: "Veste VIPER WORLDS bleu navy élégante, parfaite pour un look streetwear raffiné.",
     details: ['Tissu softshell imperméable', 'Capuche ajustable', 'Logo Viper brodé', 'Fermeture éclair premium'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'], badge: '🔥 Populaire', stock: 25, rating: 4.9, reviews: 112, color: 'Bleu Navy', colorHex: '#2c3e50'
   },
   {
-    id: 105, name: "Veste VIPER WORLD — Gris Perle", price: 20000, category: 'vestes',
+    id: 105, name: "Veste VIPER WORLDS — Gris Perle", price: 20000, category: 'vestes',
     image: '/images/jacket gris.jpeg', images: ['/images/jacket gris.jpeg', '/images/jacket gris.jpeg'],
-    description: "Veste VIPER WORLD gris perle, sobre et technique.",
+    description: "Veste VIPER WORLDS gris perle, sobre et technique.",
     details: ['Tissu softshell imperméable', 'Capuche ajustable', 'Logo Viper brodé', 'Fermeture éclair premium'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'], stock: 10, rating: 4.8, reviews: 65, color: 'Gris Perle', colorHex: '#c4c0ba'
   },
   {
-    id: 106, name: "Veste VIPER WORLD — Noir Onyx", price: 20000, category: 'vestes',
+    id: 106, name: "Veste VIPER WORLDS — Noir Onyx", price: 20000, category: 'vestes',
     image: '/images/jacket noire.jpeg', images: ['/images/jacket noire.jpeg', '/images/jacket noire.jpeg'],
-    description: "Veste VIPER WORLD noire onyx. L'incontournable de la collection.",
+    description: "Veste VIPER WORLDS noire onyx. L'incontournable de la collection.",
     details: ['Tissu softshell imperméable', 'Capuche ajustable', 'Logo Viper brodé', 'Fermeture éclair premium'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'], badge: 'Best-seller', stock: 5, rating: 5.0, reviews: 210, color: 'Noir Onyx', colorHex: '#1a1a1a'
   },

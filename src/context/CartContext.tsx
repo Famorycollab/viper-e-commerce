@@ -40,7 +40,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [productsList, setProductsList] = useState<Product[]>([]);
 
   // Catalog version — changes when default products are updated (rename, new products, etc.)
-  const CATALOG_VERSION = 'vw-4'; // Bump this to force localStorage refresh
+  const CATALOG_VERSION = 'vw-5'; // Bump this to force localStorage refresh
 
   useEffect(() => {
     try {
