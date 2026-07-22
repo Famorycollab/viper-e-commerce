@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { products as defaultProducts, type Product } from '../data/products';
-import { collection, onSnapshot, doc, setDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { ref, onValue, set, remove, get } from 'firebase/database';
 import { db } from '../config/firebase';
 
 export interface CartItem {
@@ -34,6 +34,22 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Helper: clean undefined values for Firebase (it doesn't accept undefined)
+function cleanForFirebase<T>(obj: T): T {
+  if (obj === null || obj === undefined) return obj;
+  if (Array.isArray(obj)) return obj.map(cleanForFirebase) as T;
+  if (typeof obj === 'object') {
+    const cleaned: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+      if (value !== undefined) {
+        cleaned[key] = cleanForFirebase(value);
+      }
+    }
+    return cleaned as T;
+  }
+  return obj;
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +57,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<string | null>(null);
   const [productsList, setProductsList] = useState<Product[]>([]);
 
-  // 1. Restore local cart/wishlist
+  // 1. Restore local cart/wishlist from localStorage
   useEffect(() => {
     try {
       const c = localStorage.getItem('viper-cart'); if (c) setItems(JSON.parse(c));
@@ -49,37 +65,48 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {/* */}
   }, []);
 
-  // 2. Sync Cart/Wishlist to localstorage
+  // 2. Sync Cart/Wishlist to localStorage
   useEffect(() => { localStorage.setItem('viper-cart', JSON.stringify(items)); }, [items]);
   useEffect(() => { localStorage.setItem('viper-wish', JSON.stringify(wishlist)); }, [wishlist]);
 
-  // 3. Real-time Firebase Sync for products
+  // 3. Real-time Firebase Sync for products (Realtime Database)
   useEffect(() => {
-    const productsRef = collection(db, 'products');
-    
-    // Check if products exist in Firebase, if not seed them
+    const productsRef = ref(db, 'products');
+
+    // Seed default products if database is empty
     const seedProducts = async () => {
       try {
-        const snapshot = await getDocs(productsRef);
-        if (snapshot.empty) {
+        const snapshot = await get(productsRef);
+        if (!snapshot.exists()) {
           console.log("Seeding default products to Firebase...");
-          defaultProducts.forEach(async (p) => {
-            await setDoc(doc(db, 'products', String(p.id)), p);
+          const productsMap: Record<string, Product> = {};
+          defaultProducts.forEach((p) => {
+            productsMap[String(p.id)] = cleanForFirebase(p);
           });
+          await set(productsRef, productsMap);
+          console.log("Seeding complete!");
         }
       } catch (e) {
-        console.error("Firebase connection error. Ensure Firestore database is created.", e);
+        console.error("Firebase seed error:", e);
       }
     };
     seedProducts();
 
-    const unsubscribe = onSnapshot(productsRef, (snapshot) => {
-      const dbProducts = snapshot.docs.map(doc => doc.data() as Product);
-      // Sort by id to maintain consistent order
-      dbProducts.sort((a, b) => b.id - a.id);
-      if (dbProducts.length > 0) {
+    // Listen for real-time changes
+    const unsubscribe = onValue(productsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const dbProducts: Product[] = Object.values(data);
+        // Sort by id descending (newest first)
+        dbProducts.sort((a, b) => b.id - a.id);
         setProductsList(dbProducts);
+      } else {
+        setProductsList([]);
       }
+    }, (error) => {
+      console.error("Firebase listen error:", error);
+      // Fallback to default products if Firebase fails
+      setProductsList(defaultProducts);
     });
 
     return () => unsubscribe();
@@ -106,49 +133,55 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const toggleWishlist = (id: number) => setWishlist(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id]);
 
-  // CRUD actions directly writing to Firebase
+  // CRUD actions — write directly to Firebase Realtime Database
   const addProduct = async (p: Product) => {
     try {
-      await setDoc(doc(db, 'products', String(p.id)), p);
+      const productRef = ref(db, `products/${p.id}`);
+      await set(productRef, cleanForFirebase(p));
       showToast(`✓ Produit "${p.name}" créé`);
     } catch (e) {
       showToast(`✗ Erreur lors de la création`);
-      console.error(e);
+      console.error("Add product error:", e);
     }
   };
 
   const updateProduct = async (p: Product) => {
     try {
-      await setDoc(doc(db, 'products', String(p.id)), p);
+      const productRef = ref(db, `products/${p.id}`);
+      await set(productRef, cleanForFirebase(p));
       // Update cart details silently if modified
       setItems(prev => prev.map(item => item.product.id === p.id ? { ...item, product: p } : item));
       showToast(`✓ Produit "${p.name}" modifié`);
     } catch (e) {
       showToast(`✗ Erreur lors de la modification`);
-      console.error(e);
+      console.error("Update product error:", e);
     }
   };
 
   const deleteProduct = async (id: number) => {
     try {
-      await deleteDoc(doc(db, 'products', String(id)));
+      const productRef = ref(db, `products/${id}`);
+      await remove(productRef);
       // Also remove from cart
       setItems(prev => prev.filter(item => item.product.id !== id));
       showToast(`✗ Produit supprimé`);
     } catch (e) {
       showToast(`✗ Erreur lors de la suppression`);
-      console.error(e);
+      console.error("Delete product error:", e);
     }
   };
 
   const resetProducts = async () => {
     try {
-      defaultProducts.forEach(async (p) => {
-        await setDoc(doc(db, 'products', String(p.id)), p);
+      const productsRef = ref(db, 'products');
+      const productsMap: Record<string, Product> = {};
+      defaultProducts.forEach((p) => {
+        productsMap[String(p.id)] = cleanForFirebase(p);
       });
+      await set(productsRef, productsMap);
       showToast("✓ Boutique réinitialisée aux valeurs d'origine");
     } catch (e) {
-      console.error(e);
+      console.error("Reset products error:", e);
     }
   };
 
